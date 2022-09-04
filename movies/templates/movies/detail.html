@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+{% block content %}
+
+
+<section class="main-container" >
+
+  <div class="backdrop" style="padding-top: 8px + 1vh;">
+    <div class="mx-5 row" style="margin: 7vmin 0;">
+      <div class="col-12 col-lg-4 align-self-center" style="height: 100%;">
+        <img src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}"   alt="{{ movie.title }}_poster">
+ 
+      </div>
+      <div class="col-12 col-lg-8 my-auto  ">
+        <p class="" style="color:#686868;">{{movie.release_date}} 개봉</p>
+        <h2 class="pb-2">{{ movie.title }}</h2>
+        <p class="">장르 : {{ genre }} <i style=" " class="ms-5 bi bi-star"></i>{{movie.vote_average}}</p>
+        <p class="mb-3 ">{{ movie.overview }}</p>
+        {% if request.user.is_authenticated %}
+          {% if user in movie.like_users.all %}
+            <i data-movie-id="{{ movie.pk }}" id="like-{{ movie.pk }}" 
+            class="likeForm fa-solid fa-heart"></i>
+          {% else %}
+            <i data-movie-id="{{ movie.pk }}" id="like-{{ movie.pk }}" 
+            class="likeForm fa-regular fa-heart"></i>
+          {% endif %}
+          <span id="like-count-{{ movie.pk }}" class="cnt-{{ movie.pk }}">{{ movie.like_users.all|length }} 명이 이 영화를 좋아합니다.</span>
+        {% else %}
+        <a href="{% url 'accounts:login' %}"><i class="fa-regular fa-heart"></i></a>
+        <span id="like-count-{{ movie.pk }}" class="cnt-{{ movie.pk }}">{{ movie.like_users.all|length }} 명이 이 영화를 좋아합니다.</span>
+        {% endif %}
+
+        <hr>  
+      </div>
+    </div>
+    <div>
+    </div>
+  </div>
+
+  <div class="mx-5" style="padding: 0 12px;">
+    <hr>
+    <div>
+      {% if average == 0 %}
+        <div class="h5">첫번째 리뷰의 주인공!</div>
+      {% else %}
+        <h5>평균 별점 {{ average }} / 5.0</h5>
+      {% endif %}
+    </div>
+    <hr>
+    {% for rate in rates %}
+      {% if user == rate.user and updating == 'true' %}
+        <div></div>
+      {% else %}
+        <div>
+          <div>
+            <div class="d-inline-block " style="h6;">
+              {% if rate.star == 1 %}
+                ★☆☆☆☆
+              {% elif rate.star == 2 %}
+                ★★☆☆☆
+              {% elif rate.star == 3 %}
+                ★★★☆☆
+              {% elif rate.star == 4 %}
+                ★★★★☆
+              {% else %}
+                ★★★★★
+              {% endif %}
+            </div>
+
+          <b class="d-inline-block custom-break-word "> {{ rate.star }}점 </b>
+        </div>
+        <p class="pt-1 px-1 custom-break-word text-break">{{ rate.content }}</p>
+        <div class="d-flex justify-content-between px-1">          
+          <div class="text-right">
+            <small>{{ rate.user }} | {{ rate.updated_at|date:'Y-m-d H:i' }} </small>
+            <i class="bi bi-hand-thumbs-up"></i>
+            <i class="bi bi-hand-thumbs-down"></i>
+            <i class="bi bi-exclamation-triangle"></i>
+
+          </div>
+        
+          {% if user == rate.user %}
+          <div class=" ">
+
+            <form action="{% url 'movies:delete_rate' movie.pk rate.pk %}" method="POST">
+              <button style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+              --bs-btn-font-size: .9rem;" class=" btn btn-outline-secondary "><a href="{% url 'movies:update_rate' movie.pk rate.pk %}" class=" text-decoration-none" style="color: #F3F3F3;">수정</a></button>
+              {% csrf_token %}
+              <button style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+              --bs-btn-font-size: .9rem;" class=" btn btn-outline-secondary ">삭제</button>
+            </form>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      <hr>
+    {% endfor %}
+  </div>
+
+  {% if lock == 'false' %}
+    {% if updating == 'true' %}
+      <div id="bookmark"></div>
+    {% else %}
+    <div></div>
+    {% endif %}
+    <form class="mx-5 px-3" action="" method="POST">
+      {% csrf_token %}
+      <div>
+
+        <div class="mb-1 ">
+          <div class="d-flex mb-2">
+            <label class="me-auto form-label fs-5 ps-2" for="id_content">리뷰</label>
+
+            <label class="form-label " for="id_star"></label>
+            <select name="star" style="width: 132px; " class="form-select mx-2" title="" id="id_star">
+              <option value="1">★☆☆☆☆</option>
+              <option value="2">★★☆☆☆</option>
+              <option value="3">★★★☆☆</option>
+              <option value="4">★★★★☆</option>
+              <option value="5">★★★★★</option>
+            </select>
+            <button style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+            --bs-btn-font-size: .9rem;" class="  btn btn-outline-secondary ">리뷰 작성</button>
+          </div>
+ 
+
+          <textarea name="content" cols="40" rows="10" class="form-control" placeholder="악플 안돼요^^" 
+          title="  영화의 한줄평을 작성해주세요!" style="height: 8rem; " required="" id="id_content"></textarea>
+          <small class="form-text text-muted">  소중한 의견 부탁드려요!</small>
+        </div>
+ 
+      </div>    
+    </form>
+  {% else %}
+    <div class="mb-5 mt-2 text-center" style="color: #686868;">
+      이미 한줄평을 작성한 영화입니다!
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  .text-muted {
+    color: #686868 !important;
+    padding: 3px 15px;    
+  }
+</style>
+
+<script>
+  const forms = document.querySelectorAll('.likeForm')
+  console.log(forms)
+  forms.forEach( form => {
+    console.log(form)
+    form.addEventListener('click', function(event) {
+      event.preventDefault()
+      const movieId = event.target.dataset.movieId
+      const URL = `/movies/${movieId}/like/`
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+      axios({
+        method: 'post',
+        url: URL, 
+        headers: {'X-CSRFToken': csrftoken}
+      })
+        .then(response => {
+          console.log(response)
+          const isLiked = response.data.is_liked
+          const likeCount = response.data.like_count
+          event.target.classList.toggle('fa-solid')
+          event.target.classList.toggle('fa-regular')
+          const countText = document.querySelector(`#like-count-${movieId}`)
+          countText.innerText = likeCount +" 명이 이 영화를 좋아합니다."
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          } else {
+            console.log(error)
+          }
+        })
+    })
+  })
+</script>
+
+{% endblock content %}

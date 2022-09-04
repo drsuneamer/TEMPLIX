@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- 비디오 -->
+<div class="">
+  <section class="netflix-home-video">
+    <div class="top"></div>
+    <div class="bottom"></div>
+    {% comment %} 비디오 https://www.w3schools.com/howto/howto_css_fullscreen_video.asp {% endcomment %}
+    <video id="myVideo" autoplay muted loop >
+      <source src="{% static "./video/index_video.mp4" %}" type="video/mp4">
+    </video>
+
+    <div class="content">
+      <section class="left">
+        {% comment %} 비디오 설명이미지 {% endcomment %}
+        <img class="ms-2" src="{% static "./img/video_img.webp" %}" alt="">
+        <div class="d-flex mt-2">
+          <i class="bi bi-pause-fill mt-1" id="runBtn" onclick="myRun()" 
+          style="cursor: pointer; font-size:2rem;"></i>
+
+          <i class="bi bi-volume-mute mt-1" id="muteBtn" onclick="myMute()" 
+          style="  cursor: pointer;   font-size:2rem;"></i>
+          
+          <a href="" class="text-white ms-3 mt-3 text-decoration-none"><i class="bi bi-info-circle" style=" padding: 0%;"></i> 상세 정보</a> 
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
+
+<!-- 추천 -->
+<section class="main-container" >
+
+  <h2 style="margin-top: 5vh;">My Movies</h2>
+  {% if print_my_movies|length >= 1 %}
+    <div class="box mt-4">
+      {% for movie in print_my_movies %}
+      <a class="my-auto" href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+      onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="..."></a>
+      {% endfor %} 
+    </div>
+  {% else %}
+    <br>
+    <p>아직 작성된 리뷰가 없어요!</p>
+    <p>영화를 보고 리뷰를 남겨 보세요 :)</p>
+  {% endif %}
+  <br>
+
+   
+  <h2 id="home" style="margin-top: 5vh;">Trending Now</h2>
+  <div class="box mt-4">
+    {% for movie in popular_movies %}
+    <a class="my-auto" href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+    onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="..."></a>
+    {% endfor %} 
+  </div>
+  <br>
+
+  <h2 id="myList" style="margin-top: 5vh;">Top Rated</h2>
+  <div class="box mt-4">
+    {% for movie in best_movies %}
+    <a class="my-auto" href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+      onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="..."></a>
+    {% endfor %} 
+ 
+  </div>
+  <br>
+</section>
+
+ 
+<!-- 음소거 재생 -->
+<script>
+  const video = document.querySelector("#myVideo");
+  const btn = document.querySelector("#runBtn");
+  function myRun() {
+    if (video.paused) {
+      video.play();
+      btn.setAttribute('class','bi bi-pause-fill mt-1');
+    } else {
+      video.pause();
+      btn.setAttribute('class','bi bi-play-fill mt-1');
+    }
+  }
+ 
+  const mute = document.querySelector("#muteBtn");
+  function myMute() {
+    if (video.muted) {
+      video.muted = false;
+      mute.setAttribute('class','bi bi-volume-up mt-1');
+    } else {
+      video.muted = true;
+      mute.setAttribute('class','bi bi-volume-mute mt-1' );
+    }
+  } 
+
+
+
+</script>
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+{% block content %}
+
+
+<section style=" " class="main-container" >
+ 
+  <div class="" style="padding-top: 8px + 1vh;">
+    <div class="mx-5 row" style="margin: 7vmin 0;">
+      <h1 class="mx-auto " style="max-width: 40rem;">리뷰 작성</h1>
+      <hr class="mx-auto " style="max-width: 40rem;">
+      <form class="mx-auto" style="max-width: 40rem;" action="" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div style=" "><button style="color: #F3F3F3; --bs-btn-padding-y: .3rem; --bs-btn-padding-x: .6rem; 
+          --bs-btn-font-size: 1rem; " class=" mt-2 btn btn-outline-secondary ">등록</button></div>
+      </form>  
+    </div>
+  </div>
+</section> 
+
+<style>
+  .text-muted {
+    color: #686868!important;
+   
+  }
+</style>
+{% endblock content %}
+
+

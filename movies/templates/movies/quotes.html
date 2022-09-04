@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+  <div style="padding-top: 8px + 1vh;">
+
+    <!-- 태그라인 -->
+    <section class="main-container" >
+      <div class="d-flex justify-content-between mx-4">
+        <h2 class="" style="margin-top: 7vmin;">PICK YOUR QUOTE</h2>
+        <button onClick="window.location.reload()" style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+            --bs-btn-font-size: 1rem; margin-top: 55px; " class=" mb-2 btn btn-outline-secondary ">NEW</button>    
+      </div>
+      <p class="mx-4">오늘의 기분에 어울리는 대사를 선택해 보세요! 😊</p>
+      <div class="mx-5" style="margin-top: 80px;">
+        <a class="text-decoration-none" style="color:#F3F3F3;" href="{% url 'movies:detail' movie.id %}">
+          <p class="text-center fs-1 fw-italic font-monospace">{{ movie.tagline }}</p></a>
+      </div>
+    </section>
+  </div>
+{% endblock content %}
+
+ 

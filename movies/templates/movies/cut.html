@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ 
+  <div style="padding-top: 8px + 1vh;">
+    <!-- 랜덤 추천 -->
+    <section class="main-container" >
+
+      <div class="d-flex justify-content-between mx-4">
+        <h2 class="" style="margin-top: 7vmin;">PICK YOUR CUT</h2>
+        <button onClick="window.location.reload()" style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+            --bs-btn-font-size: 1rem; margin-top:55px;" class="mb-2 btn btn-outline-secondary ">NEW</button>    
+      </div>
+      <p class="mx-4">오늘의 기분에 어울리는 장면을 선택해 보세요! 😀</p>
+      <div class="mt-4 mx-3">
+        <a href="{% url 'movies:detail' movie.movie_id %}"><img style="border-radius: 10px" src="https://image.tmdb.org/t/p/original{{ movie.backdrop_path }}" alt="{{ movie.title }}"></a>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}

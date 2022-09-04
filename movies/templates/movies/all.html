@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load bootstrap_pagination %}
+{% load static %}
+{% block content %}
+<div style="padding-top: 8px + 1vh;">
+  <section class="main-container" >
+    <h2 id="myList" style="margin-top: 7vmin;">전체 영화 목록</h2>
+    <div class="box mt-4">
+      {% for movie in page_obj %}
+      <a class="my-auto" href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+        onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="..."></a>
+      {% endfor %} 
+      
+    </div>
+  </section>
+
+  <div class="mt-4 d-flex justify-content-center">
+    {% bootstrap_paginate page_obj range=5 show_prev_next="false" show_first_last="true" %}
+  </div>
+</div>
+
+<style>
+
+  .pagination {
+    focus-box-shadow: 0 0 0 0 #141414 !important;
+  }
+  .pagination .page-link {
+    background: #141414;
+    color: #686868 ;  
+    
+    border-width: 1vmin;
+    border-color:  #141414;
+    border-radius: 50%;
+  }
+  .page-item.active .page-link {
+    color: #F3F3F3;
+ 
+  }
+</style>
+{% endblock content %}
+
+ 
+
+
+
+
+
+

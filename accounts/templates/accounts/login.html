@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+  <title>Document</title>
+  {% load static %}
+  {% load bootstrap5 %}
+  <style>
+    body{
+      background-image: linear-gradient(rgba(0, 0, 0, 0.491), rgba(0, 0, 0, 0.416)) , url(../../../static/img/login_bg.jpg);
+      height: 100vh;
+    }
+    .login-top{
+        width: 100vw;
+        height: 70px;
+        background-color: rgba(0, 0, 0, 0);
+        padding: 0px 20px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .login-top img{
+        width: 150px;
+    }
+    
+    
+    .login-box{
+        background-color: rgba(0, 0, 0, 0.899);
+        width: 430px;
+        height: 630px;
+        border-radius: 5px;
+        padding: 50px;
+    }
+    
+    .small-text{
+        font-size: 13px;
+    }
+    
+    .form-control{
+        box-shadow: none !important;
+    }
+    .bi-check{
+      width: 33;
+      height: 33;
+      color:white;
+    }
+    
+    .form-label {
+      color: #686868 ;
+      font-size: 13px;
+    }
+    .form-control {
+      border: 0px  ;
+      padding: 0px   ;
+    }
+    .login-box .mt-4 > .mb-3 {
+ 
+      background-color:white;
+      border-radius: 5px ;
+      padding: 0px 5px;
+    }
+ 
+
+  </style>
+</head>
+<body>
+  <div class="login-top">
+    <a href="{% url 'movies:index' %}">
+      <img src="{% static 'img/TEMPLIX.png' %}" alt="">   
+    </a>
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center" style="width: 100vw;">
+    <section class="login-box">
+      <h2 class="text-white fw-bold ">로그인</h2>
+      <form class="mt-4" action="" method="POST">
+ 
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-danger mt-3" style="width: 100%;">로그인</button>
+ 
+
+        <div class="mb-4 mt-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1">
+          <label class="form-check-label text-white small-text" for="exampleCheck1">로그인 정보 저장
+          </label><span class="float-end"><a class="text-white small-text text-decoration-none"   href="#">도움이 필요하신가요?</a></span>
+        </div>
+         
+        <div class="mt-5 ">
+          <p class="" style="color: rgba(212, 212, 212, 0.75);">Temflix 회원이 아닌가요?
+          <a class="text-white float-end text-decoration-none" href="{% url 'accounts:signup' %}"> 지금 가입하세요.</a></p>
+          <p class="m-0 small-text text-white  mt-2"> <span style="color: rgba(212, 212, 212, 0.75);">이 페이지는 Google reCAPTCHA의 보호를 받아 사용자가 로봇이 아님을 확인합니다. 
+          <a class="ms-4 float-end text-decoration-none" href="#"> 자세히 알아보기</a> </span> </p>
+        </div>
+      </form>
+    </section>
+  </div>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+

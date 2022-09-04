@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block head %}{% endblock %}</title>
+  <!-- CSS CDN  부트스트랩1 아이콘2-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+  <!-- fontawesome / axios -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- 스크롤 script axios -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  {% load static %}
+  <link rel='stylesheet' type="text/css" href="{% static 'css/base.css' %}"/>
+  <style>
+
+    ::placeholder {
+      font-size: 0.9em;
+      font-weight: 400;
+      opacity: 0.8; /* Firefox */
+    }
+  </style>
+</head>
+<body>
+<div style="position: relative;">
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg netflix-navbar netflix-padding-left netflix-padding-right">
+    <div class="container-fluid">
+      <div class="netflix-row">
+        <div class="left d-flex align-items-center">
+          <a class="navbar-brand" href="{% url 'movies:index' %}">
+            <img src="{% static "./img/TEMPLIX.png" %}" alt="">
+          </a>
+          <div class="netflix-nav">
+            <section>
+              <button><a class="nav-link active" aria-current="page" href="{% url 'movies:index' %}">홈</a></button>
+              <button><a class="nav-link active" aria-current="page" href="{% url 'movies:all' %}">영화</a></button>
+              <button><a class="nav-link active" aria-current="page" href="{% url 'movies:cut' %}">오늘의 장면</a></button>
+              <button><a class="nav-link active" aria-current="page" href="{% url 'movies:quotes' %}">오늘의 대사</a></button>
+              <button><a class="nav-link active" aria-current="page" href="{% url 'reviewboard:index' %}">커뮤니티</a></button>
+            </section>
+          </div>
+          <div class="netflix-dropdown-box dropdown">
+            <button class="netflix-dropdown dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            목록</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="{% url 'movies:index' %}">홈</a></li>
+              <li><a class="dropdown-item" href="{% url 'movies:all' %}">영화</a></li>
+              <li><a class="dropdown-item" href="{% url 'movies:cut' %}">오늘의 장면</a></li>
+              <li><a class="dropdown-item" href="{% url 'movies:quotes' %}">오늘의 대사</a></li>
+              <li><a class="dropdown-item" href="{% url 'reviewboard:index' %}">커뮤니티</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="right d-flex align-items-center">
+          <form class="d-flex" action="{% url 'movies:search' %}" method="get">
+            <input class="form-control" type="search" placeholder="제목으로 영화를 검색하세요" id="searchword" name="searchword" value="{{ searchword }}" aria-label="Search">
+            <button class="btn btn-outline-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .25rem;" type="submit"><i class="bi bi-search"></i></button>
+          </form>
+          {% if request.user.is_authenticated %}
+          <i class="bi bi-bell-fill"></i>
+          <div class="netflix-dropdown-box dropdown" style="display: block;">
+            <button type="button" style="" class="netflix-dropdown" data-bs-toggle="dropdown" href="#" aria-expanded="false"><i class=" bi bi-bank"></i></button>
+            <ul class="dropdown-menu" style="margin-left: -20px-10vw;">
+              <li><a href="{% url 'accounts:profile' user.username %}" class="dropdown-item" style="width: 160px;">마이페이지</a></li>
+              <li><a href="{% url 'accounts:logout' %}" class="dropdown-item" style="width: 160px;">로그아웃</a></li>
+            </ul> 
+            {% else %}
+            <button style="color: #F3F3F3; --bs-btn-padding-y: 0.65rem; --bs-btn-padding-x: .5rem; 
+            --bs-btn-font-size: .5rem;" class="  btn btn-outline-secondary ">
+              <a href="{% url 'accounts:login' %}" class=" text-decoration-none" style="color: #F3F3F3;">로그인</a></button>
+            <button style="color: #F3F3F3; --bs-btn-padding-y: 0.65rem; --bs-btn-padding-x: .5rem; 
+            --bs-btn-font-size: .5rem;" class="  btn btn-outline-secondary ">
+              <a href="{% url 'accounts:signup' %}" class=" text-decoration-none" style="color: #F3F3F3;">회원가입</a></button>
+          {% endif %}
+          </div> 
+
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="wrapper">
+    {% block content %}
+    {% endblock content %}
+
+    <!-- FOOTER LINKS -->
+    <section class="link" style="padding: 50px;">
+      <div class="logos ps-1">
+        <a href="https://github.com/m-jeon" style="padding: 10px;"><i class="fab fa-brands fa-github-square fa-2x logo"></i></a>
+        <a href="https://github.com/drsuneamer" style="padding: 10px;"><i class="fab fa-brands fa-github fa-2x logo"></i></a>
+        <a href="https://docs.google.com/presentation/d/1Xi2o3aq467j-5jhU57sDAA9jHVvBZ0Ju/edit?usp=sharing&ouid=116100504156113086488&rtpof=true&sd=true" style="padding: 10px;"><i class="fa-solid fa-file-powerpoint fa-2x logo"></i></a>
+        <a href="https://www.youtube.com/channel/UC_XI3ByFO1uZIIH-g-zJZiw" style="padding: 10px;"><i class="fab fa-youtube fa-2x logo"></i></a>
+      </div>
+      <div class="sub-links " style="margin-top: 5vh;">
+        <ul class="text-center">
+          <li><a href="#">자막 및 음성</a></li>
+          <li><a href="#">화면 해설</a></li>
+          <li><a href="#">고객 센터</a></li>
+          <li><a href="#">기프트 카드</a></li>
+          <li><a href="#">미디어 센터</a></li>
+          <li><a href="#">투자 정보(IR)</a></li>
+          <li><a href="#">입사 정보</a></li>
+          <li><a href="#">이용 약관</a></li>
+          <li><a href="#">개인정보</a></li>
+          <li><a href="#">법적고지</a></li>
+          <li><a href="#">쿠키 설정</a></li>
+          <li><a href="#">회사 정보</a></li>
+        </ul>
+      </div>
+    </section>
+    <footer>
+      <p><b>@netflix copyright</b></p>
+      <b>TEMPLIX 신선영 전민재</b>
+    </footer>
+  </div>
+</div>
+
+<!-- 스크롤 밑으로 가면 navbar 바탕 검정 -->
+<script> 
+  $(document).ready(function(){
+    $(window).scroll(function(){
+        var scroll = $(window).scrollTop();
+        if (scroll > 70) {
+          $(".netflix-navbar").css("background" , "#0C0C0C");
+        }
+  
+        else{
+            $(".netflix-navbar").css("background" , "transparent");  	
+        }
+    });
+  })  
+ 
+</script>
+<!-- Javascript CDN / axios-->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+
+</html>
+ 

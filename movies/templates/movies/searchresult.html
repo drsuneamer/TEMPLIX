@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+ 
+
+  <section class="main-container" >
+ 
+    <h2 id="myList" style="margin-top: 5vh;">RESULT</h2>
+    
+      {% if result_movies %}
+      <div class="box mt-4">
+        {% for movie in result_movies %}
+        <a class="my-auto text-decoration-none" href="{% url 'movies:detail' movie.pk %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+          onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="..."></a>
+        {% endfor %}
+      </div>
+      {% else %}
+        <br>
+        <p class="text-white">검색 결과가 없습니다!</p>
+        <p class="text-white">다른 검색어를 입력해보세요! :)</p>
+      {% endif %}  
+    
+  </section>
+  
+  
+{% endblock content %}
+

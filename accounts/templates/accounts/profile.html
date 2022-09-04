@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+
+
+
+<section style=" " class="main-container" >
+
+  <div class="" style="padding-top: 8px + 1vh;">
+    <div class="mx-5 " style="margin: 7vmin 0;">
+      <div class=" d-flex justify-content-between ">
+        <h1 class=" " style="max-width: 50rem;"><i class="fs-2 bi bi-bank"></i>{{ person.username }}님의 페이지</h1>
+        <a href="{% url 'accounts:update' %}" role="button" style="color: #F3F3F3; --bs-btn-padding-y: .65rem; --bs-btn-padding-x: .8rem; 
+        --bs-btn-font-size: 1.2rem; margin-top:60px;" class="  btn btn-outline-secondary ">회원정보수정</a>
+      </div> 
+      <hr class="mx-auto " style=" ">
+      <h3 style="margin-top: 2vh;">My Favorite Genres</h3>
+      {% if genre_print != '' %}
+        <p class="mt-4">{{ genre_print }}</p>
+      {% else %}
+        <br>
+        <p>아직 좋아하는 장르를 찾기 어려워요!</p>
+        <p>더 많은 영화에 좋아요를 눌러 보세요 :)</p>
+      {% endif %}
+      <br>
+      
+
+      <hr class="mx-auto " style="">
+      <h3 style="margin-top: 2vh;">My Like Movies</h3>
+      {% if likes|length >= 1 %}
+        <div class="box mt-4">
+          {% for like in likes %}
+          <a class="my-auto" href="{% url 'movies:detail' like.pk %}"><img src="https://image.tmdb.org/t/p/w500{{like.poster_path}}" 
+            class="card-img-top poster-img" alt="{{ like.title }}_poster"></a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <br>
+        <p>아직 작성된 좋아요가 없어요!</p>
+        <p>영화를 보고 좋아요를 남겨 보세요 :)</p>
+      {% endif %}
+      <br>
+      
+      <hr class="mx-auto " style="">
+      <h3 style="margin-top: 2vh;">My Review Movies</h3>
+      {% if reviewed_movies|length >= 1 %}
+        <div class="box mt-4">
+          {% for idx, movie in reviewed_movies %}
+          <a class="my-auto" href="{% url 'reviewboard:detail' idx %}"><img src="https://image.tmdb.org/t/p/w500{{movie.poster_path}}" 
+            class="card-img-top poster-img" alt="{{ movie.title }}_poster"></a>
+          {% endfor %} 
+        </div>
+      {% else %}
+        <br>
+        <p>아직 작성된 리뷰가 없어요!</p>
+        <p>영화를 보고 리뷰를 남겨 보세요 :)</p>
+      {% endif %}
+      <br>
+
+
+    </div>
+  </div>
+</section> 
+
+
+<style>
+  .text-muted {
+    color: #686868!important;
+    
+  }
+</style>
+
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+ 
+{% load static %}
+{% block content %}
+ 
+
+<div style="padding-top: 8px + 1vh;">
+  <section class="main-container" >
+    <div class="d-flex justify-content-between mx-4">
+      <h2 id="myList" style="margin-top: 7vmin;">전체 리뷰 목록</h2>
+      <a href="{% url 'reviewboard:create' %}" role="button" style="color: #F3F3F3; --bs-btn-padding-y: .5rem; --bs-btn-padding-x: .6rem; 
+      --bs-btn-font-size: 1rem; margin-top: 55px;" class="mb-5 btn btn-outline-secondary ">리뷰 작성</a>
+    </div>
+    <div class="box  h-100 mt-4">
+      {% for review in reviews %}
+      <a class="position-relative  my-auto" href="{% url 'reviewboard:detail' review.pk %}"><img src="https://image.tmdb.org/t/p/original{{ review.movie.poster_path }}" 
+        onerror="this.src='{% static 'img/no_photo.png' %}'" class="card-img-top poster-img" alt="{{ review.movie.title }}_poster">
+      <div class="  ">
+        <div class=" position-absolute w-100 h-100 text-center" style="top:50%;">
+          <div class="  card-title text-truncate h-50 "  style="background-color: rgba(0, 0, 0, 0.55);  padding: 0.3vmin 0.3vmin;"> 
+            <p class="text-break mt-3  text-truncate" style="font-size:calc(13px + 1vw); color: #F3F3F3;">{{review.title }}</p>
+            <p class="text-break   text-truncate" style="font-size:calc(8px + 1vw); color: #BBBBBB;">{{review.content|truncatechars:20 }}</p> 
+          </div>  
+        </div>
+      </div>  
+      </a>
+      {% endfor %} 
+    </div>
+  </section>
+</div>
+<style>
+
+  .box a:hover {
+    transition: transform .3s;
+    -ms-transform: scale(1.15);
+    -webkit-transform: scale(1.15);  
+    transform: scale(1.);
+  }
+</style>
+
+{% endblock content %}
+
+
+
+
+
+
+

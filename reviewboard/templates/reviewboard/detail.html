@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if user == review.user or user.is_superuser %}
+<div>
+<form action="{% url 'reviewboard:delete' review.pk %}" method="POST">
+</form>
+</div>
+{% endif %}
+<section class="main-container" >
+
+  <div class="backdrop" style="padding-top: 8px + 1vh;">
+    <div class="mx-5 row" style="margin: 7vmin 0;">
+      <div class="col-12 col-lg-4 align-self-center" style="height: 100%;">
+        <img src="https://image.tmdb.org/t/p/original{{ review.movie.poster_path }}" alt="{{ review.movie.title }}_poster">
+ 
+      </div>
+      <div class="col-12 col-lg-8 my-auto  ">
+        <p class="" style="color:#686868;">{{review.movie.release_date}} 개봉</p>
+        <h2 class="pb-3">{{ review.movie.title }}</h2>
+        <p class="cnt-{{ review.movie.pk}}">장르 : {{ genre }} <i style="" class="ms-5 bi bi-star"></i>{{review.movie.vote_average}}</p> 
+        
+        <hr>         
+  
+        <p class="fs-3 ">리뷰 제목: {{ review.title }}</p>
+        <p class=" fs-5  text-break">리뷰 내용: {{ review.content }}</p>
+        {% if request.user.is_authenticated %}
+          {% if user in review.like_users.all %}
+            <i data-review-id="{{ review.pk }}" id="like-{{ review.pk }}" 
+            class="likeForm2 fa-solid fa-heart"></i>
+          {% else %}
+            <i data-review-id="{{ review.pk }}" id="like-{{ review.pk }}" 
+            class="likeForm2 fa-regular fa-heart"></i> 
+          {% endif %}
+          <span id="like-count-{{ review.pk }}" class="">{{ review.like_users.all|length }} 명이 이 리뷰를 좋아합니다.</span>
+        {% else %}
+        <a href="{% url 'accounts:login' %}"><i class="fa-regular fa-heart"></i></a>
+        <span id="like-count-{{ review.pk }}" class="">{{ review.like_users.all|length }} 명이 이 리뷰를 좋아합니다.</span>
+        {% endif %}
+
+        <div class="d-flex pt-2 px-1"> 
+          <div class=" me-auto">
+            <small >{{ review.user }} | {{ review.updated_at|date:'Y-m-d H:i' }} </small>
+            <i class="bi bi-exclamation-triangle"></i>
+          </div>
+        
+          {% if user == review.user %}
+          <div>
+            <form action="{% url 'reviewboard:delete' review.pk %}" method="POST">
+              <button style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+              --bs-btn-font-size: .9rem;" class=" btn btn-outline-secondary "><a href="{% url 'reviewboard:update' review.pk %}" class=" text-decoration-none" style="color: #F3F3F3;">수정</a></button>
+              {% csrf_token %}
+              <button style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+              --bs-btn-font-size: .9rem;" class=" btn btn-outline-secondary ">삭제</button>
+            </form>
+          </div>
+          {% endif %}
+          <a href="{% url 'reviewboard:index' %}" role="button" style="color: #F3F3F3; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; 
+          --bs-btn-font-size: .9rem;" class="ms-1 btn btn-outline-secondary ">리뷰 목록</a> 
+        </div>
+        <hr> 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+
+  const forms = document.querySelectorAll('.likeForm2')
+  console.log(forms)
+  forms.forEach( form => {
+    console.log(form)
+    form.addEventListener('click', function(event) {
+      event.preventDefault()
+      const reviewId = event.target.dataset.reviewId
+      const URL = `/reviewboard/${reviewId}/like/`
+      {% comment %} const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value {% endcomment %}
+      axios({
+        method: 'post',
+        url: URL, 
+        headers: {'X-CSRFToken': csrftoken}
+      })
+        .then(response => {
+          console.log(response)
+          const isLiked = response.data.is_liked
+          const likeCount = response.data.like_count
+          event.target.classList.toggle('fa-solid')
+          event.target.classList.toggle('fa-regular')
+          const countText = document.querySelector(`#like-count-${reviewId}`)
+          countText.innerText = likeCount +" 명이 이 리뷰를 좋아합니다."
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          } else {
+            console.log(error)
+          }
+        })
+    })
+  })
+</script>
+
+
+{% endblock content %}
+
+ 
+ 
